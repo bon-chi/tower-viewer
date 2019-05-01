@@ -2,8 +2,6 @@
 #include <poppler-document.h>
 #include <poppler-page-renderer.h>
 
-using namespace std;
-
 class MyArea : public Gtk::DrawingArea {
  public:
   MyArea();
