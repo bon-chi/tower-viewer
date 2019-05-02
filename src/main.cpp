@@ -1,6 +1,7 @@
 #include <gtkmm.h>
 #include <poppler-document.h>
 #include <poppler-page-renderer.h>
+#include <iostream>
 
 class MyArea : public Gtk::DrawingArea {
  public:
@@ -10,6 +11,9 @@ class MyArea : public Gtk::DrawingArea {
 
  protected:
   bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+  bool on_focus_in_event(GdkEventFocus* focus_event) override;
+  bool on_focus_out_event(GdkEventFocus* focus_event) override;
+  bool on_key_press_event(GdkEventKey* key_event) override;
   Glib::RefPtr<Gtk::Builder> m_refGlade;
 };
 
@@ -31,6 +35,35 @@ bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
                                 (height - m_image->get_height()) / 2.0);
   cr->paint();
 
+  return true;
+}
+
+bool MyArea::on_focus_in_event(GdkEventFocus* focus_event) {
+  std::cout << "focus on" << std::endl;
+  return true;
+}
+bool MyArea::on_focus_out_event(GdkEventFocus* focus_event) {
+  std::cout << "focus out" << std::endl;
+  return true;
+}
+bool MyArea::on_key_press_event(GdkEventKey* key_event) {
+  //  std::cout << key_event << std::endl;
+  switch (key_event->keyval) {
+    case GDK_KEY_Up:
+      std::cout << "up" << std::endl;
+      break;
+    case GDK_KEY_Down:
+      std::cout << "down" << std::endl;
+      break;
+    case GDK_KEY_Right:
+      std::cout << "right" << std::endl;
+      break;
+    case GDK_KEY_Left:
+      std::cout << "left" << std::endl;
+      break;
+    default:
+      std::cout << "other" << std::endl;
+  }
   return true;
 }
 
