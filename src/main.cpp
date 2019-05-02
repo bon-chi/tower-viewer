@@ -5,13 +5,16 @@
 class MyArea : public Gtk::DrawingArea {
  public:
   MyArea() = default;
+  MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
   ~MyArea() override = default;
 
  protected:
   bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
+  Glib::RefPtr<Gtk::Builder> m_refGlade;
 };
 
-
+MyArea::MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
+    : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {}
 
 bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
   Gtk::Allocation allocation = get_allocation();
@@ -21,7 +24,7 @@ bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
   auto page = document->create_page(0);
   poppler::page_renderer renderer;
   poppler::image img = renderer.render_page(page);
-  auto* bar = reinterpret_cast<guint8*>((unsigned char*)(img.data()));
+  auto* bar = (unsigned char*)(img.data());
   auto m_image = Gdk::Pixbuf::create_from_data(bar, Gdk::Colorspace::COLORSPACE_RGB, true, 8,
                                                img.width(), img.height(), img.bytes_per_row());
   Gdk::Cairo::set_source_pixbuf(cr, m_image, (width - m_image->get_width()) / 2.0,
@@ -31,15 +34,48 @@ bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
   return true;
 }
 
+class MyWindow : public Gtk::Window {
+ public:
+  MyWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
+      : Gtk::Window(cobject), m_refGlade(refGlade) {
+    MyArea* area = nullptr;
+    refGlade->get_widget_derived("page-drawing-area", area);
+    //    area->show();
+  }
+
+ protected:
+  Glib::RefPtr<Gtk::Builder> m_refGlade;
+};
+
 int main(int argc, char* argv[]) {
   auto app = Gtk::Application::create(argc, argv, "com.github.bon-chi.tower-viewer");
 
-  Gtk::Window window;
-  MyArea drawingArea;
+#ifdef RELEASE
+  Glib::RefPtr<Gtk::Builder> builder =
+      Gtk::Builder::create_from_resource("/com/github/bon-chi/tower-viewer/tower-viewer.glade");
+#else
+  Glib::RefPtr<Gtk::Builder> builder =
+      Gtk::Builder::create_from_file("../resources/tower-viewer.glade");
+#endif
+  //  Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("../tower-viewer.glade");
 
-  window.set_default_size(600, 900);
-  window.add(drawingArea);
-  drawingArea.show();
+  Gtk::Window* window2 = nullptr;
+  builder->get_widget("main-window", window2);
+  MyArea* area = nullptr;
+  builder->get_widget_derived("page-drawing-area", area);
 
-  return app->run(window);
+  //  MyWindow* window2 = nullptr;
+  //  builder->get_widget_derived("main-window", window2);
+
+  //  window2->add(*area);
+
+  //  Gtk::Window window;
+  //  MyArea drawingArea;
+  //
+  //  window.set_default_size(600, 900);
+  //  window.add(drawingArea);
+  //  drawingArea.show();
+
+  //  return app->run(window);
+  return app->run(*window2);
 }
