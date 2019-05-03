@@ -16,8 +16,12 @@ LINK_DIRECTORIES(${GTKMM3_LIBRARY_DIRS})
 ADD_DEFINITIONS(${GTKMM3_CFLAGS_OTHER})
 
 # src
+## document
 add_subdirectory(src/document)
 TARGET_INCLUDE_DIRECTORIES(document PUBLIC ${POPPLER_INCLUDE_DIRS})
+## widgets
+add_subdirectory(src/widgets)
+TARGET_INCLUDE_DIRECTORIES(widgets PUBLIC ${GTKMM3_INCLUDE_DIRS})
 
 # resources
 add_subdirectory(resources)
@@ -26,4 +30,4 @@ set_source_files_properties(resources/resources.c PROPERTIES GENERATED TRUE)
 # generate executable
 add_executable(tower-viewer src/main.cpp resources/resources.c)
 add_dependencies(tower-viewer generate_resources)
-TARGET_LINK_LIBRARIES(tower-viewer ${GTKMM3_LIBRARIES} document)
+TARGET_LINK_LIBRARIES(tower-viewer ${GTKMM3_LIBRARIES} document widgets)

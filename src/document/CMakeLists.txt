@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES(${POPPLER_INCLUDE_DIRS})
 LINK_DIRECTORIES(${POPPLER_LIBRARY_DIRS})
 ADD_DEFINITIONS(${POPPLER_CFLAGS_OTHER})
 
-add_library(document STATIC SHARED
+add_library(document STATIC
         document.cpp
         document.h
         )
