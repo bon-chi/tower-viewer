@@ -17,6 +17,7 @@ class PageDrawingArea : public Gtk::DrawingArea {
   bool on_focus_in_event(GdkEventFocus* focus_event) override;
   bool on_focus_out_event(GdkEventFocus* focus_event) override;
   bool on_key_press_event(GdkEventKey* key_event) override;
+  bool on_scroll_event(GdkEventScroll* scroll_event) override;
   Glib::RefPtr<Gtk::Builder> m_refGlade;
   Document *m_document;
 };

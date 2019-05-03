@@ -9,6 +9,7 @@ PageDrawingArea::PageDrawingArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk
 PageDrawingArea::PageDrawingArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade, std::string filepath)
     : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {
   this->m_document = new Document(filepath);
+  this->add_events(Gdk::SCROLL_MASK);
 }
 
 bool PageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
@@ -25,6 +26,18 @@ bool PageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
                                 (height - m_image->get_height()) / 2.0);
   cr->paint();
 
+  return true;
+}
+
+bool PageDrawingArea::on_scroll_event(GdkEventScroll* scroll_event) {
+  switch(scroll_event->direction){
+    case GDK_SCROLL_UP:
+      std::cout << "scroll up" << std::endl;
+      break;
+    case GDK_SCROLL_DOWN:
+      std::cout << "scroll down" << std::endl;
+      break;
+  }
   return true;
 }
 

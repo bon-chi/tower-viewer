@@ -15,7 +15,10 @@ void Document::decrement_page() {
 }
 
 poppler::image Document::image() {
-  return this->m_renderer->render_page(this->m_document->create_page(this->m_page_num));
+  return this->m_renderer->render_page(
+      this->m_document->create_page(this->m_page_num)
+      , 72.0 * 1, 72.0 * 1, -1, -1, -1, -1
+  );
 }
 
 std::string Document::file_name() {
