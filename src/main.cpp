@@ -9,6 +9,8 @@ class MyArea : public Gtk::DrawingArea {
   MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
   ~MyArea() override = default;
 
+  unsigned int page_num = 0;
+
  protected:
   bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
   bool on_focus_in_event(GdkEventFocus* focus_event) override;
@@ -21,11 +23,12 @@ MyArea::MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGla
     : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {}
 
 bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
+  std::cout << "redraw" << std::endl;
   Gtk::Allocation allocation = get_allocation();
   const int width = allocation.get_width();
   const int height = allocation.get_height();
   auto document = poppler::document::load_from_file("../rulebook.pdf");
-  auto page = document->create_page(0);
+  auto page = document->create_page(this->page_num);
   poppler::page_renderer renderer;
   poppler::image img = renderer.render_page(page);
   auto* bar = (unsigned char*)(img.data());
@@ -51,9 +54,13 @@ bool MyArea::on_key_press_event(GdkEventKey* key_event) {
   switch (key_event->keyval) {
     case GDK_KEY_Up:
       std::cout << "up" << std::endl;
+      if (this->page_num != 0) {
+        this->page_num--;
+      }
       break;
     case GDK_KEY_Down:
       std::cout << "down" << std::endl;
+      this->page_num++;
       break;
     case GDK_KEY_Right:
       std::cout << "right" << std::endl;
@@ -64,6 +71,7 @@ bool MyArea::on_key_press_event(GdkEventKey* key_event) {
     default:
       std::cout << "other" << std::endl;
   }
+  this->queue_draw();
   return true;
 }
 
