@@ -10,6 +10,7 @@ PageDrawingArea::PageDrawingArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk
     : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {
   this->m_document = new Document(filepath);
   this->add_events(Gdk::SCROLL_MASK);
+  this->set_size_request(1000, 1000);
 }
 
 bool PageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
@@ -26,6 +27,7 @@ bool PageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
                                 (height - m_image->get_height()) / 2.0);
   cr->paint();
 
+  std::cout << "width: " <<  this->get_allocation().get_width() << " height: " << this->get_allocation().get_height()  << std::endl;
   return true;
 }
 
