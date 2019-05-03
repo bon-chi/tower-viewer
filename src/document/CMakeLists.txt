@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 2.8)
+find_package(PkgConfig REQUIRED)
+
+PKG_CHECK_MODULES(POPPLER REQUIRED poppler-cpp)
+
+INCLUDE_DIRECTORIES(${POPPLER_INCLUDE_DIRS})
+LINK_DIRECTORIES(${POPPLER_LIBRARY_DIRS})
+ADD_DEFINITIONS(${POPPLER_CFLAGS_OTHER})
+
+add_library(document STATIC SHARED
+        document.cpp
+        document.h
+        )
+
+TARGET_LINK_LIBRARIES(document ${POPPLER_LIBRARIES})

@@ -1,6 +1,4 @@
 #include <gtkmm.h>
-#include <poppler-document.h>
-#include <poppler-page-renderer.h>
 #include <iostream>
 #include "document/document.h"
 
@@ -50,7 +48,6 @@ bool MyArea::on_focus_out_event(GdkEventFocus* focus_event) {
   return true;
 }
 bool MyArea::on_key_press_event(GdkEventKey* key_event) {
-  //  std::cout << key_event << std::endl;
   switch (key_event->keyval) {
     case GDK_KEY_Up:
       std::cout << "up" << std::endl;

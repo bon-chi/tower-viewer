@@ -15,7 +15,7 @@ class Document {
  private:
   std::string m_filepath;
   poppler::document *m_document;
-  poppler::page_renderer m_renderer;
+  poppler::page_renderer *m_renderer;
   unsigned int m_page_num;
 };
 #endif  // TOWER_VIEWER_DOCUMENT_H
