@@ -2,6 +2,7 @@
 #include <poppler-document.h>
 #include <poppler-page-renderer.h>
 #include <iostream>
+#include "document/document.h"
 
 class MyArea : public Gtk::DrawingArea {
  public:
@@ -9,28 +10,27 @@ class MyArea : public Gtk::DrawingArea {
   MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
   ~MyArea() override = default;
 
-  unsigned int page_num = 0;
-
  protected:
   bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
   bool on_focus_in_event(GdkEventFocus* focus_event) override;
   bool on_focus_out_event(GdkEventFocus* focus_event) override;
   bool on_key_press_event(GdkEventKey* key_event) override;
   Glib::RefPtr<Gtk::Builder> m_refGlade;
+  Document *m_document;
 };
 
 MyArea::MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
-    : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {}
+    : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {
+  this->m_document = new Document("../rulebook.pdf");
+}
 
 bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
   std::cout << "redraw" << std::endl;
   Gtk::Allocation allocation = get_allocation();
   const int width = allocation.get_width();
   const int height = allocation.get_height();
-  auto document = poppler::document::load_from_file("../rulebook.pdf");
-  auto page = document->create_page(this->page_num);
-  poppler::page_renderer renderer;
-  poppler::image img = renderer.render_page(page);
+
+  poppler::image img = this->m_document->image();
   auto* bar = (unsigned char*)(img.data());
   auto m_image = Gdk::Pixbuf::create_from_data(bar, Gdk::Colorspace::COLORSPACE_RGB, true, 8,
                                                img.width(), img.height(), img.bytes_per_row());
@@ -54,13 +54,11 @@ bool MyArea::on_key_press_event(GdkEventKey* key_event) {
   switch (key_event->keyval) {
     case GDK_KEY_Up:
       std::cout << "up" << std::endl;
-      if (this->page_num != 0) {
-        this->page_num--;
-      }
+      this->m_document->decrement_page();
       break;
     case GDK_KEY_Down:
       std::cout << "down" << std::endl;
-      this->page_num++;
+      this->m_document->increment_page();
       break;
     case GDK_KEY_Right:
       std::cout << "right" << std::endl;

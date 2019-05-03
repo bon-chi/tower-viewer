@@ -15,7 +15,7 @@ LINK_DIRECTORIES(${GTKMM3_LIBRARY_DIRS} ${POPPLER_LIBRARY_DIRS})
 
 ADD_DEFINITIONS(${GTKMM3_CFLAGS_OTHER} ${POPPLER_CFLAGS_OTHER})
 
-add_executable(tower-viewer src/main.cpp resources/resources.c)
+add_executable(tower-viewer src/main.cpp resources/resources.c src/document/document.h src/document/document.cpp)
 set_source_files_properties(resources/resources.c PROPERTIES GENERATED TRUE)
 add_dependencies(tower-viewer generate_resources)
 
