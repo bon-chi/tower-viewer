@@ -11,6 +11,7 @@ class Document {
   void increment_page();
   void decrement_page();
   poppler::image image();
+  std::string file_name();
 
  private:
   std::string m_filepath;

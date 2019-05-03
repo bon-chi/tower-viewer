@@ -6,6 +6,7 @@ class MyArea : public Gtk::DrawingArea {
  public:
   MyArea() = default;
   MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade);
+  MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade, std::string filepath);
   ~MyArea() override = default;
 
  protected:
@@ -18,8 +19,10 @@ class MyArea : public Gtk::DrawingArea {
 };
 
 MyArea::MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
+    : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {}
+MyArea::MyArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade, std::string filepath)
     : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {
-  this->m_document = new Document("../rulebook.pdf");
+  this->m_document = new Document(filepath);
 }
 
 bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
@@ -74,9 +77,15 @@ class MyWindow : public Gtk::Window {
  public:
   MyWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade)
       : Gtk::Window(cobject), m_refGlade(refGlade) {
-    MyArea* area = nullptr;
-    refGlade->get_widget_derived("page-drawing-area", area);
-    //    area->show();
+//    MyArea* area = nullptr;
+//    refGlade->get_widget_derived("page-drawing-area", area);
+  }
+  MyWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade, std::string filepath)
+      : Gtk::Window(cobject), m_refGlade(refGlade) {
+//    MyArea* area = nullptr;
+//    refGlade->get_widget_derived("page-drawing-area", area);
+    auto path_index = filepath.find_last_of("/") + 1;
+    this->set_title(filepath.substr(path_index, filepath.size() - path_index));
   }
 
  protected:
@@ -95,10 +104,12 @@ int main(int argc, char* argv[]) {
 #endif
   //  Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("../tower-viewer.glade");
 
-  Gtk::Window* window2 = nullptr;
-  builder->get_widget("main-window", window2);
+//  Gtk::Window* window2 = nullptr;
+//  builder->get_widget("main-window", window2);
+  MyWindow* window2 = nullptr;
+  builder->get_widget_derived("main-window", window2, "../rulebook.pdf");
   MyArea* area = nullptr;
-  builder->get_widget_derived("page-drawing-area", area);
+  builder->get_widget_derived("page-drawing-area", area, "../rulebook.pdf");
 
   //  MyWindow* window2 = nullptr;
   //  builder->get_widget_derived("main-window", window2);

@@ -17,3 +17,8 @@ void Document::decrement_page() {
 poppler::image Document::image() {
   return this->m_renderer->render_page(this->m_document->create_page(this->m_page_num));
 }
+
+std::string Document::file_name() {
+  auto path_index = this->m_filepath.find_last_of("/") + 1;
+  return this->m_filepath.substr(path_index, this->m_filepath.size() - path_index);
+}
