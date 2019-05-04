@@ -1,7 +1,3 @@
-//
-// Created by koji on 5/3/19.
-//
-
 #ifndef TOWER_VIEWER_PAGE_WINDOW_H
 #define TOWER_VIEWER_PAGE_WINDOW_H
 

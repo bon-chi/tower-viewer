@@ -18,6 +18,8 @@ ADD_DEFINITIONS(${POPPLER_CFLAGS_OTHER})
 add_library(widgets STATIC
         page_drawing_area.cpp
         page_drawing_area.h
-        page_window.cpp page_window.h)
+        page_window.cpp page_window.h
+        page_drawing_window.cpp page_drawing_window.h
+        page_viewport.cpp page_viewport.h)
 
 TARGET_LINK_LIBRARIES(widgets ${GTKMM3_LIBRARIES} ${POPPLER_LIBRARIES} document)

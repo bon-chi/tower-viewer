@@ -2,6 +2,8 @@
 #include <iostream>
 #include "document/document.h"
 #include "widgets/page_drawing_area.h"
+#include "widgets/page_drawing_window.h"
+#include "widgets/page_viewport.h"
 #include "widgets/page_window.h"
 
 int main(int argc, char* argv[]) {
@@ -17,6 +19,12 @@ int main(int argc, char* argv[]) {
 
   PageWindow* window = nullptr;
   builder->get_widget_derived("main-window", window, "../rulebook.pdf");
+
+  PageDrawingWindow* drawing_window = nullptr;
+  builder->get_widget_derived("page-drawing-window", drawing_window);
+
+  PageViewPort* viewport = nullptr;
+  builder->get_widget_derived("page-viewport", viewport);
 
   PageDrawingArea* area = nullptr;
   builder->get_widget_derived("page-drawing-area", area, "../rulebook.pdf");

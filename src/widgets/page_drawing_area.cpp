@@ -9,6 +9,7 @@ PageDrawingArea::PageDrawingArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk
 PageDrawingArea::PageDrawingArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refGlade, std::string filepath)
     : Gtk::DrawingArea(cobject), m_refGlade(refGlade) {
   this->m_document = new Document(filepath);
+  this->add_events(Gdk::KEY_PRESS_MASK);
   this->add_events(Gdk::SCROLL_MASK);
   this->set_size_request(1000, 1000);
 }
@@ -40,7 +41,7 @@ bool PageDrawingArea::on_scroll_event(GdkEventScroll* scroll_event) {
       std::cout << "scroll down" << std::endl;
       break;
   }
-  return true;
+  return false;
 }
 
 bool PageDrawingArea::on_focus_in_event(GdkEventFocus* focus_event) {
@@ -71,6 +72,6 @@ bool PageDrawingArea::on_key_press_event(GdkEventKey* key_event) {
       std::cout << "other" << std::endl;
   }
   this->queue_draw();
-  return true;
+  return false;
 }
 
