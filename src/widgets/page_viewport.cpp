@@ -13,7 +13,9 @@ PageViewPort::PageViewPort(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Buil
 
 bool PageViewPort::on_scroll_event(GdkEventScroll* scroll_event) {
   auto h = this->get_hadjustment()->get_value();
-  std::cout << "----------------------viewprot scroll " << h <<std::endl;
+#ifdef DEBUG
+  std::cout << "----------------------viewport scroll " << h <<std::endl;
+#endif
   return false;
 }
 
@@ -24,7 +26,9 @@ bool PageViewPort::on_key_press_event(GdkEventKey* key_event) {
   switch (key_event->keyval) {
     case GDK_KEY_Right:
       adj->set_value(adj->get_value() + step);
+#ifdef DEBUG
       std::cout << "right" << std::endl;
+#endif
       break;
     case GDK_KEY_Left:
       if (adj->get_value() < step) {
@@ -32,10 +36,14 @@ bool PageViewPort::on_key_press_event(GdkEventKey* key_event) {
       } else {
         adj->set_value(adj->get_value() - step);
       }
+#ifdef DEBUG
       std::cout << "left" << std::endl;
+#endif
       break;
+#ifdef DEBUG
     default:
       std::cout << "other" << std::endl;
+#endif
   }
   return false;
 }

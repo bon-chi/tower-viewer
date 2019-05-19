@@ -15,7 +15,9 @@ PageDrawingArea::PageDrawingArea(BaseObjectType* cobject, const Glib::RefPtr<Gtk
 }
 
 bool PageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
+#ifdef DEBUG
   std::cout << "redraw" << std::endl;
+#endif
   Gtk::Allocation allocation = get_allocation();
   const int width = allocation.get_width();
   const int height = allocation.get_height();
@@ -28,48 +30,66 @@ bool PageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
                                 (height - m_image->get_height()) / 2.0);
   cr->paint();
 
-  std::cout << "width: " <<  this->get_allocation().get_width() << " height: " << this->get_allocation().get_height()  << std::endl;
+  std::cout << "pageDrawingArea width: " <<  this->get_allocation().get_width() << " height: " << this->get_allocation().get_height()  << std::endl;
   return true;
 }
 
 bool PageDrawingArea::on_scroll_event(GdkEventScroll* scroll_event) {
   switch(scroll_event->direction){
     case GDK_SCROLL_UP:
+#ifdef DEBUG
       std::cout << "scroll up" << std::endl;
+#endif
       break;
     case GDK_SCROLL_DOWN:
+#ifdef DEBUG
       std::cout << "scroll down" << std::endl;
+#endif
       break;
   }
   return false;
 }
 
 bool PageDrawingArea::on_focus_in_event(GdkEventFocus* focus_event) {
+#ifdef DEBUG
   std::cout << "focus on" << std::endl;
+#endif
   return true;
 }
 bool PageDrawingArea::on_focus_out_event(GdkEventFocus* focus_event) {
+#ifdef DEBUG
   std::cout << "focus out" << std::endl;
+#endif
   return true;
 }
 bool PageDrawingArea::on_key_press_event(GdkEventKey* key_event) {
   switch (key_event->keyval) {
     case GDK_KEY_Up:
+#ifdef DEBUG
       std::cout << "up" << std::endl;
+#endif
       this->m_document->decrement_page();
       break;
     case GDK_KEY_Down:
+#ifdef DEBUG
       std::cout << "down" << std::endl;
+#endif
       this->m_document->increment_page();
       break;
     case GDK_KEY_Right:
+#ifdef DEBUG
       std::cout << "right" << std::endl;
+#endif
       break;
     case GDK_KEY_Left:
+#ifdef DEBUG
       std::cout << "left" << std::endl;
+#endif
       break;
+#ifdef DEBUG
     default:
       std::cout << "other" << std::endl;
+#endif
   }
   this->queue_draw();
   return false;
